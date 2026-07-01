@@ -34,6 +34,13 @@ Cifras:
 - API REST + Dashboard web embebido
 - Docker ready
 
+Ver las demos en vivo:
+- Product Overview: https://hyperiumia.github.io/hyperium-zero-state-docs/01_landing.html
+- Scan Dashboard: https://hyperiumia.github.io/hyperium-zero-state-docs/02_dashboard.html
+- Acta Notariada Digital: https://hyperiumia.github.io/hyperium-zero-state-docs/03_acta.html
+- Arquitectura Tecnica: https://hyperiumia.github.io/hyperium-zero-state-docs/04_architecture.html
+- Threat Intelligence (STIX 2.0): https://hyperiumia.github.io/hyperium-zero-state-docs/05_threat_intel.html
+
 Por que importa:
 En Red Team, la trazabilidad y la integridad de la evidencia no es opcional. Un acta que demuestra el estado baseline del sistema ANTES del engagement es lo que diferencia una operacion profesional de un pentest improvisado.
 
@@ -59,6 +66,8 @@ Validador de integridad pre-engagement construido en Rust.
 73 checks de seguridad. 20 reglas YARA. 7 modulos de auditoria. 217 tests. Acta digital ISO 27037. SHA-256 evidence chain. STIX 2.0 export.
 
 15 segundos. Un binario de 2MB. Cero dependencias externas en runtime.
+
+Demos en vivo: https://hyperiumia.github.io/hyperium-zero-state-docs/
 
 Patricio Tirado — Hyperiumia
 
