@@ -4,6 +4,14 @@
 
 Certifica el estado inicial de un sistema antes de cualquier operacion ofensiva. Produce un acta notariada digital inmutable, sellada con SHA-256, conforme a ISO/IEC 27037:2012.
 
+## Live Demos
+
+- [Product Overview](https://hyperiumia.github.io/hyperium-zero-state-docs/01_landing.html) — Landing page, modules, terminal demo
+- [Scan Dashboard](https://hyperiumia.github.io/hyperium-zero-state-docs/02_dashboard.html) — Live scan results, findings, evidence chain
+- [Digital Notarized Act](https://hyperiumia.github.io/hyperium-zero-state-docs/03_acta.html) — ISO 27037 forensic document
+- [System Architecture](https://hyperiumia.github.io/hyperium-zero-state-docs/04_architecture.html) — Tech stack, flow, API specs
+- [Threat Intelligence](https://hyperiumia.github.io/hyperium-zero-state-docs/05_threat_intel.html) — STIX 2.0 export, IOCs
+
 ## Metricas
 
 | Dato | Valor |
@@ -21,11 +29,11 @@ Certifica el estado inicial de un sistema antes de cualquier operacion ofensiva.
 
 ## Modulos
 
-- **Persistence Audit** — 20 vectores Linux (crontab, systemd, SUID, PAM, kernel modules...)
+- **Persistence Audit** — 20 vectores Linux (crontab, systemd, SUID, PAM, kernel modules)
 - **Network State** — Conexiones, listeners, deteccion C2
 - **Integrity Check** — Hash SHA-256 de binarios y configs criticos
 - **Memory Scan** — Procesos ocultos, inyeccion, LOLBIN abuse
-- **YARA Engine** — 20 reglas de deteccion (shells, ransomware, miners, backdoors...)
+- **YARA Engine** — 20 reglas de deteccion (shells, ransomware, miners, backdoors)
 - **Hardware Audit** — USB malicioso, TPM, Secure Boot, BIOS
 - **User Session** — Cuentas root, passwords vacios, sudo NOPASSWD, SSH
 
