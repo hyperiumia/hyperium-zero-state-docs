@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZERO-STATE — Hyperium</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#06060a;--s:#0c0c14;--s2:#12121e;--ac:#e8c547;--ac2:#d4a017;--r:#ff3b4f;--g:#00e676;--b:#448aff;--w:#ffa726;--t:#eaeaea;--m:#5a5a72;--bd:#1e1e30;--glow:0 0 40px rgba(232,197,71,0.15)}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t);font-family:'Space Grotesk',sans-serif;line-height:1.7;overflow-x:hidden}
+::selection{background:var(--ac);color:var(--bg)}
+
+/* NOISE */
+body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;padding:60px 20px}
+.hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(232,197,71,0.06) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border:1px solid var(--bd);border-radius:100px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--m);margin-bottom:40px;font-family:'JetBrains Mono',monospace}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--g);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+h1.hero-title{font-size:clamp(48px,8vw,96px);font-weight:700;line-height:1;letter-spacing:-3px;margin-bottom:24px}
+h1.hero-title .accent{color:var(--ac)}
+.hero-sub{font-size:clamp(16px,2vw,22px);color:var(--m);max-width:700px;margin-bottom:48px;font-weight:300;line-height:1.6}
+.hero-cta{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.btn{padding:14px 32px;border-radius:6px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:all .3s ease;border:none}
+.btn-primary{background:var(--ac);color:var(--bg)}
+.btn-primary:hover{background:#f0d060;box-shadow:var(--glow);letter-spacing:2px}
+.btn-ghost{background:transparent;color:var(--t);border:1px solid var(--bd)}
+.btn-ghost:hover{border-color:var(--ac);color:var(--ac)}
+
+/* METRICS */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bd);margin:0 auto;max-width:1200px;width:90%}
+.metric{background:var(--s);padding:40px 30px;text-align:center}
+.metric .val{font-size:48px;font-weight:700;color:var(--ac);font-family:'JetBrains Mono',monospace;line-height:1}
+.metric .label{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--m);margin-top:8px}
+
+/* MODULES */
+.modules-section{padding:120px 20px;max-width:1200px;margin:0 auto}
+.section-label{font-size:11px;text-transform:uppercase;letter-spacing:4px;color:var(--ac);margin-bottom:16px;font-family:'JetBrains Mono',monospace}
+.section-title{font-size:clamp(32px,5vw,56px);font-weight:700;letter-spacing:-2px;margin-bottom:16px;line-height:1.1}
+.section-sub{font-size:16px;color:var(--m);max-width:600px;margin-bottom:64px}
+.modules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1px;background:var(--bd)}
+.module-card{background:var(--s);padding:36px;transition:all .3s;position:relative;overflow:hidden}
+.module-card:hover{background:var(--s2)}
+.module-card:hover .module-num{color:var(--ac)}
+.module-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--m);margin-bottom:16px;transition:color .3s}
+.module-name{font-size:20px;font-weight:600;margin-bottom:8px}
+.module-count{font-size:12px;color:var(--m);font-family:'JetBrains Mono',monospace}
+.module-bar{height:2px;background:var(--bd);margin-top:20px;overflow:hidden}
+.module-bar-fill{height:100%;background:var(--ac);transition:width .6s ease}
+
+/* TERMINAL */
+.terminal-section{padding:80px 20px;max-width:900px;margin:0 auto}
+.terminal{background:var(--s);border:1px solid var(--bd);border-radius:12px;overflow:hidden}
+.terminal-header{padding:12px 20px;background:var(--s2);display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--bd)}
+.terminal-dot{width:12px;height:12px;border-radius:50%}
+.terminal-dot.r{background:#ff5f57}.terminal-dot.y{background:#ffbd2e}.terminal-dot.g{background:#28c840}
+.terminal-title{margin-left:12px;font-size:12px;color:var(--m);font-family:'JetBrains Mono',monospace}
+.terminal-body{padding:24px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:2}
+.terminal-body .prompt{color:var(--ac)}
+.terminal-body .cmd{color:var(--t)}
+.terminal-body .out{color:var(--g)}
+.terminal-body .warn{color:var(--w)}
+.terminal-body .crit{color:var(--r)}
+.terminal-body .info{color:var(--b)}
+.terminal-body .hash{color:var(--m);font-size:11px}
+
+/* VERDICT */
+.verdict-section{padding:120px 20px;text-align:center}
+.verdict-box{max-width:600px;margin:0 auto;padding:60px 40px;border:2px solid var(--bd);border-radius:16px;position:relative}
+.verdict-box::before{content:'';position:absolute;inset:-1px;border-radius:16px;background:linear-gradient(135deg,rgba(232,197,71,0.1),transparent);pointer-events:none;z-index:-1}
+.verdict-label{font-size:11px;text-transform:uppercase;letter-spacing:4px;color:var(--m);font-family:'JetBrains Mono',monospace}
+.verdict-result{font-size:72px;font-weight:700;margin:16px 0;letter-spacing:-2px}
+.verdict-clean{color:var(--g)}
+.verdict-score{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--m)}
+.score-bar{height:4px;background:var(--bd);border-radius:2px;margin-top:24px;overflow:hidden}
+.score-fill{height:100%;border-radius:2px;width:0;animation:fillScore 2s ease forwards 0.5s}
+@keyframes fillScore{to{width:92%}}
+.score-fill.clean{background:linear-gradient(90deg,var(--g),var(--ac))}
+
+/* FOOTER */
+.footer{padding:60px 20px;border-top:1px solid var(--bd);text-align:center}
+.footer-brand{font-size:14px;letter-spacing:3px;text-transform:uppercase;color:var(--m)}
+.footer-brand span{color:var(--ac)}
+.footer-sub{font-size:11px;color:var(--m);margin-top:12px;letter-spacing:1px}
+
+/* ANIMATIONS */
+.fade-up{opacity:0;transform:translateY(30px);animation:fadeUp .8s ease forwards}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+.delay-1{animation-delay:.1s}.delay-2{animation-delay:.2s}.delay-3{animation-delay:.3s}
+.delay-4{animation-delay:.4s}.delay-5{animation-delay:.5s}.delay-6{animation-delay:.6s}
+</style>
+</head>
+<body>
+
+<section class="hero">
+    <div class="hero-badge fade-up"><span class="dot"></span> v1.0.0 — ISO/IEC 27037 Compliant</div>
+    <h1 class="hero-title fade-up delay-1"><span class="accent">ZERO</span>-STATE</h1>
+    <p class="hero-sub fade-up delay-2">Pre-Engagement Integrity Validator. Certifies system state before offensive operations. Immutable SHA-256 sealed digital notarized act.</p>
+    <div class="hero-cta fade-up delay-3">
+        <a href="#" class="btn btn-primary">Request Access</a>
+        <a href="#" class="btn btn-ghost">Documentation</a>
+    </div>
+</section>
+
+<section class="metrics fade-up delay-4">
+    <div class="metric"><div class="val">73</div><div class="label">Security Checks</div></div>
+    <div class="metric"><div class="val">217</div><div class="label">Automated Tests</div></div>
+    <div class="metric"><div class="val">7</div><div class="label">Audit Modules</div></div>
+    <div class="metric"><div class="val">~15s</div><div class="label">Full Scan</div></div>
+</section>
+
+<section class="modules-section">
+    <div class="section-label fade-up">AUDIT MODULES</div>
+    <div class="section-title fade-up delay-1">Seven pillars of<br>system integrity</div>
+    <div class="section-sub fade-up delay-2">Each module independently verifies a critical attack surface vector, producing cryptographically sealed evidence.</div>
+    <div class="modules-grid fade-up delay-3">
+        <div class="module-card">
+            <div class="module-num">01</div>
+            <div class="module-name">Persistence Audit</div>
+            <div class="module-count">20 checks — crontab, systemd, SUID, PAM, kernel modules</div>
+            <div class="module-bar"><div class="module-bar-fill" style="width:100%"></div></div>
+        </div>
+        <div class="module-card">
+            <div class="module-num">02</div>
+            <div class="module-name">Network State</div>
+            <div class="module-count">7 checks — connections, listeners, C2 detection</div>
+            <div class="module-bar"><div class="module-bar-fill" style="width:35%"></div></div>
+        </div>
+        <div class="module-card">
+            <div class="module-num">03</div>
+            <div class="module-name">Integrity Check</div>
+            <div class="module-count">7 checks — SHA-256 binary verification, config audit</div>
+            <div class="module-bar"><div class="module-bar-fill" style="width:35%"></div></div>
+        </div>
+        <div class="module-card">
+            <div class="module-num">04</div>
+            <div class="module-name">Memory Scan</div>
+            <div class="module-count">6 checks — hidden processes, injection, LOLBIN</div>
+            <div class="module-bar"><div class="module-bar-fill" style="width:30%"></div></div>
+        </div>
+        <div class="module-card">
+            <div class="module-num">05</div>
+            <div class="module-name">YARA Engine</div>
+            <div class="module-count">20 rules — C2, shells, ransomware, miners, backdoors</div>
+            <div class="module-bar"><div class="module-bar-fill" style="width:100%"></div></div>
+        </div>
+        <div class="module-card">
+            <div class="module-num">06</div>
+            <div class="module-name">Hardware Audit</div>
+            <div class="module-count">6 checks — USB, TPM, Secure Boot, BIOS</div>
+            <div class="module-bar"><div class="module-bar-fill" style="width:30%"></div></div>
+        </div>
+        <div class="module-card">
+            <div class="module-num">07</div>
+            <div class="module-name">User Session</div>
+            <div class="module-count">7 checks — accounts, sudo, SSH, passwords</div>
+            <div class="module-bar"><div class="module-bar-fill" style="width:35%"></div></div>
+        </div>
+    </div>
+</section>
+
+<section class="terminal-section">
+    <div class="section-label fade-up">COMMAND LINE INTERFACE</div>
+    <div class="section-title fade-up delay-1">Built for operators</div>
+    <div class="terminal fade-up delay-2">
+        <div class="terminal-header">
+            <div class="terminal-dot r"></div><div class="terminal-dot y"></div><div class="terminal-dot g"></div>
+            <div class="terminal-title">zero-state</div>
+        </div>
+        <div class="terminal-body">
+<span class="prompt">$</span> <span class="cmd">zero-state scan --client "Banco Nacional" --authorized-by "CISO"</span>
+<br><br>
+<span class="info">  Hyperium ZERO-STATE v1.0.0</span>
+<span class="info">  Client: Banco Nacional | Authorized by: CISO | Target: localhost</span>
+<br>
+<span class="info">  [1/7] Persistence Audit...</span> <span class="out">20 checks passed</span>
+<span class="info">  [2/7] Network State...</span> <span class="out">7 checks, 0 suspicious</span>
+<span class="info">  [3/7] Integrity Check...</span> <span class="out">7 checks, all hashes valid</span>
+<span class="info">  [4/7] Memory Scan...</span> <span class="out">47 processes, 0 hidden</span>
+<span class="info">  [5/7] YARA Engine...</span> <span class="warn">1 match — YARA-013 (HIGH)</span>
+<span class="info">  [6/7] Hardware Audit...</span> <span class="out">USB: 2 devices, TPM: present</span>
+<span class="info">  [7/7] User Session...</span> <span class="out">5 users, 0 root equiv</span>
+<br>
+<span class="cmd">  Verdict:</span> <span class="warn">SUSPICIOUS</span> <span class="cmd">| Score: 85/100 | Duration: 14.2s</span>
+<br>
+<span class="cmd">  Acta ID:</span> <span class="hash">ZS-20260630-a7f3b2c1</span>
+<span class="cmd">  Chain:</span> <span class="out">VALID</span> <span class="hash">| 7 entries | SHA-256: e3b0c44...</span>
+<br>
+<span class="cmd">  Exported: acta_Banco_Nacional.json</span>
+<span class="cmd">  Exported: findings_Banco_Nacional.csv</span>
+<span class="cmd">  Exported: threat_intel_Banco_Nacional.stix</span>
+        </div>
+    </div>
+</section>
+
+<section class="verdict-section">
+    <div class="section-label fade-up">VERDICT ENGINE</div>
+    <div class="section-title fade-up delay-1" style="margin-bottom:48px">Automated forensic verdict</div>
+    <div class="verdict-box fade-up delay-2">
+        <div class="verdict-label">System Verdict</div>
+        <div class="verdict-result verdict-clean">CLEAN</div>
+        <div class="verdict-score">Integrity Score: 92 / 100</div>
+        <div class="score-bar"><div class="score-fill clean"></div></div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="footer-brand">Hyperium <span>ZERO-STATE</span></div>
+    <div class="footer-sub">Patricio Tirado — CEO, Hyperiumia — ISO/IEC 27037:2012</div>
+</footer>
+
+</body>
+</html>

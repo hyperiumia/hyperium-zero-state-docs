@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>ZERO-STATE Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#06060a;--s:#0c0c14;--s2:#14142a;--s3:#1a1a32;--ac:#e8c547;--r:#ff3b4f;--g:#00e676;--b:#448aff;--w:#ffa726;--t:#eaeaea;--m:#5a5a72;--bd:#1e1e30}
+body{background:var(--bg);color:var(--t);font-family:'Space Grotesk',sans-serif;font-size:13px;min-height:100vh;display:grid;grid-template-columns:240px 1fr;grid-template-rows:56px 1fr}
+
+/* SIDEBAR */
+.sidebar{grid-row:1/-1;background:var(--s);border-right:1px solid var(--bd);padding:20px;display:flex;flex-direction:column}
+.logo{font-size:18px;font-weight:700;color:var(--ac);letter-spacing:2px;margin-bottom:32px;font-family:'JetBrains Mono',monospace}
+.logo span{display:block;font-size:10px;color:var(--m);letter-spacing:3px;margin-top:4px;font-weight:400}
+.nav-item{padding:10px 14px;border-radius:6px;margin-bottom:4px;cursor:pointer;transition:all .2s;color:var(--m);font-size:12px;letter-spacing:1px;display:flex;align-items:center;gap:10px}
+.nav-item:hover{background:var(--s2);color:var(--t)}
+.nav-item.active{background:var(--s2);color:var(--ac)}
+.nav-icon{width:16px;height:16px;border-radius:3px;background:var(--bd)}
+.nav-item.active .nav-icon{background:var(--ac)}
+.nav-divider{height:1px;background:var(--bd);margin:16px 0}
+.nav-label{font-size:9px;text-transform:uppercase;letter-spacing:3px;color:var(--m);margin-bottom:8px;padding:0 14px}
+
+/* TOPBAR */
+.topbar{background:var(--s);border-bottom:1px solid var(--bd);padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+.topbar-left{display:flex;align-items:center;gap:16px}
+.topbar-title{font-size:14px;font-weight:600}
+.topbar-breadcrumb{font-size:11px;color:var(--m)}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--g);margin-right:8px}
+.status-text{font-size:11px;color:var(--g);font-family:'JetBrains Mono',monospace}
+.topbar-right{display:flex;align-items:center;gap:16px}
+.topbar-btn{padding:6px 14px;border:1px solid var(--bd);border-radius:4px;font-size:11px;color:var(--m);cursor:pointer;background:none;font-family:inherit;letter-spacing:1px}
+.topbar-btn.primary{background:var(--ac);color:var(--bg);border-color:var(--ac);font-weight:600}
+
+/* MAIN */
+.main{padding:24px;overflow-y:auto;background:radial-gradient(ellipse at 20% 20%,rgba(232,197,71,0.02),transparent 60%),var(--bg)}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px}
+.stat-card{background:var(--s);border:1px solid var(--bd);border-radius:8px;padding:20px;position:relative;overflow:hidden}
+.stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat-card.green::after{background:var(--g)}
+.stat-card.yellow::after{background:var(--ac)}
+.stat-card.red::after{background:var(--r)}
+.stat-card.blue::after{background:var(--b)}
+.stat-card.orange::after{background:var(--w)}
+.stat-label{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--m);font-family:'JetBrains Mono',monospace}
+.stat-value{font-size:36px;font-weight:700;font-family:'JetBrains Mono',monospace;line-height:1.2;margin-top:8px}
+.stat-value.green{color:var(--g)}.stat-value.yellow{color:var(--ac)}.stat-value.red{color:var(--r)}.stat-value.blue{color:var(--b)}.stat-value.orange{color:var(--w)}
+.stat-sub{font-size:11px;color:var(--m);margin-top:4px}
+
+/* GRID */
+.content-grid{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:24px}
+.card{background:var(--s);border:1px solid var(--bd);border-radius:8px;overflow:hidden}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center}
+.card-title{font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+.card-badge{font-size:10px;padding:2px 8px;border-radius:3px;font-weight:600;letter-spacing:1px}
+.badge-clean{background:rgba(0,230,118,0.15);color:var(--g)}
+.badge-warn{background:rgba(255,167,38,0.15);color:var(--w)}
+.badge-crit{background:rgba(255,59,79,0.15);color:var(--r)}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:10px 16px;font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--m);font-family:'JetBrains Mono',monospace;border-bottom:1px solid var(--bd);background:var(--s2)}
+td{padding:12px 16px;border-bottom:1px solid var(--bd);font-size:12px}
+tr:hover{background:rgba(232,197,71,0.02)}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:500}
+.status::before{content:'';width:6px;height:6px;border-radius:50%}
+.status.pass::before{background:var(--g)}.status.pass{color:var(--g)}
+.status.warn::before{background:var(--w)}.status.warn{color:var(--w)}
+.status.fail::before{background:var(--r)}.status.fail{color:var(--r)}
+
+/* FINDINGS */
+.finding{padding:14px 20px;border-bottom:1px solid var(--bd);transition:background .2s}
+.finding:hover{background:var(--s2)}
+.finding:last-child{border-bottom:none}
+.finding-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.finding-title{font-size:12px;font-weight:600}
+.finding-desc{font-size:11px;color:var(--m)}
+.finding-loc{font-size:10px;color:var(--m);font-family:'JetBrains Mono',monospace;margin-top:4px}
+.sev{font-size:9px;padding:2px 8px;border-radius:3px;font-weight:700;letter-spacing:1px;font-family:'JetBrains Mono',monospace}
+.sev-crit{background:rgba(255,59,79,0.2);color:var(--r)}
+.sev-high{background:rgba(255,167,38,0.2);color:var(--w)}
+.sev-med{background:rgba(68,138,255,0.2);color:var(--b)}
+
+/* SCORE */
+.score-ring{width:120px;height:120px;position:relative;margin:24px auto 16px}
+.score-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.score-ring circle{fill:none;stroke-width:6}
+.score-ring .bg{stroke:var(--bd)}
+.score-ring .fg{stroke:var(--g);stroke-linecap:round;stroke-dasharray:339.3;stroke-dashoffset:27.1;transition:stroke-dashoffset 2s ease}
+.score-val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.score-num{font-size:32px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--g)}
+.score-label{font-size:9px;color:var(--m);text-transform:uppercase;letter-spacing:2px}
+
+/* EVIDENCE */
+.evidence-item{padding:10px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:12px;font-size:11px}
+.evidence-item:last-child{border-bottom:none}
+.ev-num{font-family:'JetBrains Mono',monospace;color:var(--m);font-size:10px;min-width:24px}
+.ev-cat{color:var(--ac);font-weight:500;min-width:100px}
+.ev-hash{color:var(--m);font-family:'JetBrains Mono',monospace;font-size:10px}
+
+/* BOTTOM ROW */
+.bottom-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+    <div class="logo">ZERO-STATE<span>HYPERIUM v1.0.0</span></div>
+    <div class="nav-label">Monitor</div>
+    <div class="nav-item active"><div class="nav-icon"></div>Dashboard</div>
+    <div class="nav-item"><div class="nav-icon"></div>Live Scan</div>
+    <div class="nav-item"><div class="nav-icon"></div>History</div>
+    <div class="nav-divider"></div>
+    <div class="nav-label">Modules</div>
+    <div class="nav-item"><div class="nav-icon"></div>Persistence</div>
+    <div class="nav-item"><div class="nav-icon"></div>Network</div>
+    <div class="nav-item"><div class="nav-icon"></div>Integrity</div>
+    <div class="nav-item"><div class="nav-icon"></div>Memory</div>
+    <div class="nav-item"><div class="nav-icon"></div>YARA Engine</div>
+    <div class="nav-item"><div class="nav-icon"></div>Hardware</div>
+    <div class="nav-item"><div class="nav-icon"></div>User Session</div>
+    <div class="nav-divider"></div>
+    <div class="nav-label">Export</div>
+    <div class="nav-item"><div class="nav-icon"></div>JSON</div>
+    <div class="nav-item"><div class="nav-icon"></div>CSV</div>
+    <div class="nav-item"><div class="nav-icon"></div>STIX 2.0</div>
+    <div style="flex:1"></div>
+    <div style="font-size:10px;color:var(--m);padding:0 14px;font-family:'JetBrains Mono',monospace">ISO/IEC 27037</div>
+</nav>
+
+<header class="topbar">
+    <div class="topbar-left">
+        <div class="topbar-title">Scan Results</div>
+        <div class="topbar-breadcrumb">/ Banco Nacional / 2026-06-30 / ZS-20260630-a7f3b2c1</div>
+    </div>
+    <div class="topbar-right">
+        <div style="display:flex;align-items:center"><span class="status-dot"></span><span class="status-text">API Connected</span></div>
+        <button class="topbar-btn">STIX</button>
+        <button class="topbar-btn">CSV</button>
+        <button class="topbar-btn primary">Export JSON</button>
+    </div>
+</header>
+
+<main class="main">
+    <div class="stats-row">
+        <div class="stat-card yellow">
+            <div class="stat-label">Verdict</div>
+            <div class="stat-value yellow">SUSPICIOUS</div>
+            <div class="stat-sub">Score 85/100</div>
+        </div>
+        <div class="stat-card green">
+            <div class="stat-label">Checks Passed</div>
+            <div class="stat-value green">72</div>
+            <div class="stat-sub">of 73 total</div>
+        </div>
+        <div class="stat-card red">
+            <div class="stat-label">Findings</div>
+            <div class="stat-value red">3</div>
+            <div class="stat-sub">0 Critical / 1 High / 2 Medium</div>
+        </div>
+        <div class="stat-card blue">
+            <div class="stat-label">Duration</div>
+            <div class="stat-value blue">14.2s</div>
+            <div class="stat-sub">7 modules executed</div>
+        </div>
+        <div class="stat-card orange">
+            <div class="stat-label">Evidence Chain</div>
+            <div class="stat-value green">VALID</div>
+            <div class="stat-sub">7 sealed entries</div>
+        </div>
+    </div>
+
+    <div class="content-grid">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Module Results</span>
+                <span class="card-badge badge-warn">1 Warning</span>
+            </div>
+            <table>
+                <thead><tr><th>Module</th><th>Checks</th><th>Passed</th><th>Failed</th><th>Time</th><th>Status</th></tr></thead>
+                <tbody>
+                    <tr><td style="font-weight:600">Persistence Audit</td><td>20</td><td>20</td><td>0</td><td>4.1s</td><td><span class="status pass">Clean</span></td></tr>
+                    <tr><td style="font-weight:600">Network State</td><td>7</td><td>7</td><td>0</td><td>0.8s</td><td><span class="status pass">Clean</span></td></tr>
+                    <tr><td style="font-weight:600">Integrity Check</td><td>7</td><td>7</td><td>0</td><td>2.3s</td><td><span class="status pass">Clean</span></td></tr>
+                    <tr><td style="font-weight:600">Memory Scan</td><td>6</td><td>6</td><td>0</td><td>0.4s</td><td><span class="status pass">Clean</span></td></tr>
+                    <tr><td style="font-weight:600">YARA Engine</td><td>20</td><td>19</td><td>1</td><td>3.2s</td><td><span class="status warn">1 Match</span></td></tr>
+                    <tr><td style="font-weight:600">Hardware Audit</td><td>6</td><td>6</td><td>0</td><td>1.1s</td><td><span class="status pass">Clean</span></td></tr>
+                    <tr><td style="font-weight:600">User Session</td><td>7</td><td>7</td><td>0</td><td>2.3s</td><td><span class="status pass">Clean</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="card">
+            <div class="card-header"><span class="card-title">Integrity Score</span><span class="card-badge badge-clean">85/100</span></div>
+            <div class="score-ring">
+                <svg viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="54"/><circle class="fg" cx="60" cy="60" r="54"/></svg>
+                <div class="score-val"><span class="score-num">85</span><span class="score-label">Score</span></div>
+            </div>
+            <div style="padding:0 20px 20px">
+                <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:8px"><span style="color:var(--m)">Critical</span><span style="color:var(--g);font-family:'JetBrains Mono'">0</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:8px"><span style="color:var(--m)">High</span><span style="color:var(--w);font-family:'JetBrains Mono'">1</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:8px"><span style="color:var(--m)">Medium</span><span style="color:var(--b);font-family:'JetBrains Mono'">2</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:8px"><span style="color:var(--m)">YARA Match</span><span style="color:var(--w);font-family:'JetBrains Mono'">1 (-15)</span></div>
+                <div style="height:1px;background:var(--bd);margin:12px 0"></div>
+                <div style="display:flex;justify-content:space-between;font-size:11px"><span style="color:var(--ac);font-weight:600">Final Score</span><span style="color:var(--ac);font-weight:700;font-family:'JetBrains Mono'">85</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-row">
+        <div class="card">
+            <div class="card-header"><span class="card-title">Findings</span><span class="card-badge badge-warn">3 Active</span></div>
+            <div class="finding">
+                <div class="finding-header"><span class="finding-title">YARA Match: Dropper/Downloader Pattern</span><span class="sev sev-high">HIGH</span></div>
+                <div class="finding-desc">Suspicious download-and-execute pattern detected in shell script</div>
+                <div class="finding-loc">/tmp/.cache_update.sh | SHA-256: a3f2b8c1...</div>
+            </div>
+            <div class="finding">
+                <div class="finding-header"><span class="finding-title">NOPASSWD sudo rule detected</span><span class="sev sev-med">MEDIUM</span></div>
+                <div class="finding-desc">User 'deploy' has NOPASSWD sudo access to all commands</div>
+                <div class="finding-loc">/etc/sudoers.d/deploy | User: deploy</div>
+            </div>
+            <div class="finding">
+                <div class="finding-header"><span class="finding-title">World-writable home directory</span><span class="sev sev-med">MEDIUM</span></div>
+                <div class="finding-desc">Home directory permissions allow write by all users (777)</div>
+                <div class="finding-loc">/home/deploy | Current: drwxrwxrwx | Expected: drwxr-x---</div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header"><span class="card-title">Evidence Chain</span><span class="card-badge badge-clean">Valid</span></div>
+            <div class="evidence-item"><span class="ev-num">#1</span><span class="ev-cat">persistence</span><span class="ev-hash">sha256:e3b0c442...</span></div>
+            <div class="evidence-item"><span class="ev-num">#2</span><span class="ev-cat">network</span><span class="ev-hash">sha256:7d38f5b2...</span></div>
+            <div class="evidence-item"><span class="ev-num">#3</span><span class="ev-cat">integrity</span><span class="ev-hash">sha256:9f86d081...</span></div>
+            <div class="evidence-item"><span class="ev-num">#4</span><span class="ev-cat">memory</span><span class="ev-hash">sha256:b94d27b9...</span></div>
+            <div class="evidence-item"><span class="ev-num">#5</span><span class="ev-cat">yara</span><span class="ev-hash">sha256:c3ab8ff1...</span></div>
+            <div class="evidence-item"><span class="ev-num">#6</span><span class="ev-cat">hardware</span><span class="ev-hash">sha256:2c624232...</span></div>
+            <div class="evidence-item"><span class="ev-num">#7</span><span class="ev-cat">user_session</span><span class="ev-hash">sha256:4a8a08f0...</span></div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

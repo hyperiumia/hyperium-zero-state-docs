@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hyperium ZERO-STATE v1.0.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#06060a;--s:#0c0c14;--bd:#1e1e30;--ac:#e8c547;--g:#00e676;--t:#eaeaea;--m:#5a5a72}
+body{background:var(--bg);color:var(--t);font-family:'Space Grotesk',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(232,197,71,0.04),transparent 70%);pointer-events:none}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border:1px solid var(--bd);border-radius:100px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--m);font-family:'JetBrains Mono',monospace;margin-bottom:32px}
+.badge .dot{width:6px;height:6px;border-radius:50%;background:var(--g)}
+h1{font-size:clamp(40px,7vw,72px);font-weight:700;letter-spacing:-2px;text-align:center;margin-bottom:8px}
+h1 .ac{color:var(--ac)}
+.sub{font-size:16px;color:var(--m);text-align:center;max-width:500px;margin-bottom:48px;font-weight:300}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;max-width:1000px;width:100%;margin-bottom:48px}
+.card{background:var(--s);border:1px solid var(--bd);border-radius:12px;padding:32px;transition:all .3s;cursor:pointer;text-decoration:none;color:inherit;display:block}
+.card:hover{border-color:var(--ac);transform:translateY(-4px);box-shadow:0 20px 60px rgba(232,197,71,0.08)}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--m);margin-bottom:12px;letter-spacing:2px}
+.card-title{font-size:20px;font-weight:600;margin-bottom:8px}
+.card-desc{font-size:13px;color:var(--m);line-height:1.6}
+.card-arrow{margin-top:16px;font-size:12px;color:var(--ac);font-weight:600;letter-spacing:1px}
+.footer{text-align:center;color:var(--m);font-size:11px;border-top:1px solid var(--bd);padding-top:24px;width:100%;max-width:1000px}
+.footer a{color:var(--ac);text-decoration:none}
+.stats{display:flex;gap:32px;margin-bottom:48px;flex-wrap:wrap;justify-content:center}
+.stat{text-align:center}
+.stat .val{font-size:32px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--ac)}
+.stat .lbl{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--m);margin-top:4px}
+</style>
+</head>
+<body>
+<div class="badge"><span class="dot"></span> v1.0.0 — ISO/IEC 27037 Compliant</div>
+<h1><span class="ac">ZERO</span>-STATE</h1>
+<div class="sub">Pre-Engagement Integrity Validator — Hyperiumia</div>
+<div class="stats">
+<div class="stat"><div class="val">73</div><div class="lbl">Checks</div></div>
+<div class="stat"><div class="val">217</div><div class="lbl">Tests</div></div>
+<div class="stat"><div class="val">7</div><div class="lbl">Modules</div></div>
+<div class="stat"><div class="val">~15s</div><div class="lbl">Scan</div></div>
+<div class="stat"><div class="val">2.1MB</div><div class="lbl">Binary</div></div>
+</div>
+<div class="grid">
+<a class="card" href="01_landing.html"><div class="card-num">01</div><div class="card-title">Product Overview</div><div class="card-desc">Landing page with modules, metrics, terminal demo, and verdict engine visualization.</div><div class="card-arrow">View -></div></a>
+<a class="card" href="02_dashboard.html"><div class="card-num">02</div><div class="card-title">Scan Dashboard</div><div class="card-desc">Live scan results with module table, findings, score ring, and SHA-256 evidence chain.</div><div class="card-arrow">View -></div></a>
+<a class="card" href="03_acta.html"><div class="card-num">03</div><div class="card-title">Digital Notarized Act</div><div class="card-desc">ISO 27037 compliant forensic document with verdict, sealed hash, and legal notice.</div><div class="card-arrow">View -></div></a>
+<a class="card" href="04_architecture.html"><div class="card-num">04</div><div class="card-title">System Architecture</div><div class="card-desc">Technical architecture, execution flow, tech stack, API specs, and build specifications.</div><div class="card-arrow">View -></div></a>
+<a class="card" href="05_threat_intel.html"><div class="card-num">05</div><div class="card-title">Threat Intelligence</div><div class="card-desc">STIX 2.0 export with IOCs, threat topology, indicators, and intelligence objects.</div><div class="card-arrow">View -></div></a>
+</div>
+<div class="footer">Hyperiumia — <a href="https://github.com/hyperiumia">GitHub</a> — <a href="mailto:hyperiumia@protonmail.com">Contact</a><br><br>Patricio Tirado, CEO</div>
+</body>
+</html>

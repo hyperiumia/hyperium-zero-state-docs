@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Acta Notariada Digital — ZERO-STATE</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#faf8f4;--s:#fff;--ac:#1a1a2e;--gold:#b8860b;--r:#c0392b;--g:#27ae60;--b:#2980b9;--t:#1a1a1a;--m:#666;--bd:#d4c5a9;--light:#f0ece4}
+body{background:var(--bg);color:var(--t);font-family:'Cormorant Garamond',serif;line-height:1.8}
+
+.acta{max-width:900px;margin:40px auto;padding:60px 80px;background:var(--s);box-shadow:0 0 60px rgba(0,0,0,0.08);position:relative;border:1px solid var(--bd)}
+.acta::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--gold),var(--ac),var(--gold))}
+
+.acta-header{text-align:center;padding-bottom:40px;border-bottom:2px solid var(--ac)}
+.acta-brand{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:6px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.acta-title{font-size:42px;font-weight:300;letter-spacing:-1px;margin-bottom:4px}
+.acta-subtitle{font-size:16px;color:var(--m);font-style:italic}
+.acta-id{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--m);margin-top:20px;letter-spacing:2px}
+.acta-seal{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;border:2px solid var(--gold);border-radius:4px;margin-top:16px}
+.acta-seal-text{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+
+.acta-section{padding:32px 0}
+.acta-section-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--bd);padding-bottom:8px;margin-bottom:20px}
+.acta-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.acta-field{padding:12px 0;border-bottom:1px solid var(--light)}
+.acta-field-label{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--m);font-family:'JetBrains Mono',monospace;margin-bottom:4px}
+.acta-field-value{font-size:18px;font-weight:500}
+.acta-field-value.mono{font-family:'JetBrains Mono',monospace;font-size:14px}
+
+.verdict-block{text-align:center;padding:40px;border:2px solid var(--g);margin:20px 0;position:relative}
+.verdict-block::before{content:'VERIFIED';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--s);padding:0 16px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--g)}
+.verdict-text{font-size:48px;font-weight:700;color:var(--g);letter-spacing:4px}
+.verdict-score{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--m);margin-top:8px}
+
+.modules-table{width:100%;border-collapse:collapse;margin:16px 0}
+.modules-table th{text-align:left;padding:10px 16px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--m);border-bottom:2px solid var(--ac)}
+.modules-table td{padding:12px 16px;border-bottom:1px solid var(--light);font-size:14px}
+.modules-table td:last-child{text-align:right;font-family:'JetBrains Mono',monospace}
+.clean-badge{display:inline-block;padding:2px 10px;background:rgba(39,174,96,0.1);color:var(--g);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;border-radius:3px}
+.warn-badge{display:inline-block;padding:2px 10px;background:rgba(184,134,11,0.1);color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;border-radius:3px}
+
+.finding-block{padding:20px;border-left:3px solid var(--bd);margin:16px 0;background:var(--light)}
+.finding-block.high{border-left-color:var(--gold)}
+.finding-block.medium{border-left-color:var(--b)}
+.finding-block-title{font-size:16px;font-weight:600}
+.finding-block-desc{font-size:14px;color:var(--m);margin-top:4px}
+.finding-block-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--m);margin-top:8px}
+
+.hash-block{background:var(--ac);color:#e8e8e8;padding:24px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:2;margin:20px 0;letter-spacing:1px}
+.hash-block .label{color:var(--gold);font-size:9px;letter-spacing:3px;display:block;margin-bottom:4px}
+
+.legal{font-size:13px;color:var(--m);line-height:1.8;padding:20px 0;border-top:1px solid var(--bd)}
+.legal-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--t);margin-bottom:12px}
+
+.acta-footer{text-align:center;padding-top:40px;border-top:2px solid var(--ac);margin-top:40px}
+.acta-footer-brand{font-size:24px;font-weight:300;letter-spacing:4px}
+.acta-footer-brand span{color:var(--gold);font-weight:600}
+.acta-footer-sub{font-size:12px;color:var(--m);margin-top:8px;font-style:italic}
+
+.stamp{position:absolute;top:60px;right:80px;width:120px;height:120px;border:3px solid var(--r);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;transform:rotate(-15deg);opacity:0.7}
+.stamp-text{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--r);font-weight:700}
+.stamp-date{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--r);font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="acta">
+    <div class="stamp">
+        <span class="stamp-text">CERTIFIED</span>
+        <span class="stamp-date">2026-06-30</span>
+        <span class="stamp-text">ISO 27037</span>
+    </div>
+
+    <div class="acta-header">
+        <div class="acta-brand">Hyperiumia</div>
+        <div class="acta-title">Acta Notariada Digital</div>
+        <div class="acta-subtitle">Pre-Engagement Integrity Validation Report</div>
+        <div class="acta-id">ZS-20260630-a7f3b2c1</div>
+        <div class="acta-seal"><span class="acta-seal-text">SHA-256 Sealed</span></div>
+    </div>
+
+    <div class="acta-section">
+        <div class="acta-section-title">I. Identification</div>
+        <div class="acta-grid">
+            <div class="acta-field"><div class="acta-field-label">Client</div><div class="acta-field-value">Banco Nacional S.A.</div></div>
+            <div class="acta-field"><div class="acta-field-label">Authorized By</div><div class="acta-field-value">CISO — Juan Perez</div></div>
+            <div class="acta-field"><div class="acta-field-label">Target</div><div class="acta-field-value mono">srv-web-prod-01.local</div></div>
+            <div class="acta-field"><div class="acta-field-label">Date / Time (UTC)</div><div class="acta-field-value mono">2026-06-30T14:32:17Z</div></div>
+            <div class="acta-field"><div class="acta-field-label">Platform</div><div class="acta-field-value mono">Linux x86_64</div></div>
+            <div class="acta-field"><div class="acta-field-label">Operator</div><div class="acta-field-value">Patricio Tirado</div></div>
+        </div>
+    </div>
+
+    <div class="acta-section">
+        <div class="acta-section-title">II. Verdict</div>
+        <div class="verdict-block">
+            <div class="verdict-text">SUSPICIOUS</div>
+            <div class="verdict-score">Integrity Score: 85 / 100 — Duration: 14.2 seconds</div>
+        </div>
+    </div>
+
+    <div class="acta-section">
+        <div class="acta-section-title">III. Module Summary</div>
+        <table class="modules-table">
+            <thead><tr><th>Module</th><th>Checks</th><th>Passed</th><th>Findings</th><th>Status</th></tr></thead>
+            <tbody>
+                <tr><td>Persistence Audit</td><td>20</td><td>20</td><td>0</td><td><span class="clean-badge">CLEAN</span></td></tr>
+                <tr><td>Network State</td><td>7</td><td>7</td><td>0</td><td><span class="clean-badge">CLEAN</span></td></tr>
+                <tr><td>Integrity Check</td><td>7</td><td>7</td><td>0</td><td><span class="clean-badge">CLEAN</span></td></tr>
+                <tr><td>Memory Scan</td><td>6</td><td>6</td><td>0</td><td><span class="clean-badge">CLEAN</span></td></tr>
+                <tr><td>YARA Engine</td><td>20</td><td>19</td><td>1</td><td><span class="warn-badge">1 MATCH</span></td></tr>
+                <tr><td>Hardware Audit</td><td>6</td><td>6</td><td>0</td><td><span class="clean-badge">CLEAN</span></td></tr>
+                <tr><td>User Session</td><td>7</td><td>7</td><td>2</td><td><span class="warn-badge">2 FINDINGS</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="acta-section">
+        <div class="acta-section-title">IV. Findings</div>
+        <div class="finding-block high">
+            <div class="finding-block-title">YARA-013: Dropper/Downloader Pattern</div>
+            <div class="finding-block-desc">Suspicious download-and-execute pattern detected. File contains curl|bash pattern commonly used by malware droppers.</div>
+            <div class="finding-block-meta">Severity: HIGH | Location: /tmp/.cache_update.sh | SHA-256: a3f2b8c1e9d4...</div>
+        </div>
+        <div class="finding-block medium">
+            <div class="finding-block-title">NOPASSWD Sudo Rule</div>
+            <div class="finding-block-desc">User 'deploy' has unrestricted NOPASSWD sudo access, violating principle of least privilege.</div>
+            <div class="finding-block-meta">Severity: MEDIUM | Location: /etc/sudoers.d/deploy | Remediation: Restrict to specific commands</div>
+        </div>
+        <div class="finding-block medium">
+            <div class="finding-block-title">World-Writable Home Directory</div>
+            <div class="finding-block-desc">Home directory permissions (777) allow write access to all system users.</div>
+            <div class="finding-block-meta">Severity: MEDIUM | Location: /home/deploy | Remediation: chmod 750 /home/deploy</div>
+        </div>
+    </div>
+
+    <div class="acta-section">
+        <div class="acta-section-title">V. Integrity Hash</div>
+        <div class="hash-block">
+            <span class="label">DOCUMENT INTEGRITY VERIFICATION</span>
+            SHA-256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855<br>
+            Chain Valid: TRUE | Entries: 7 | Total Duration: 14,247 ms
+        </div>
+    </div>
+
+    <div class="acta-section">
+        <div class="legal">
+            <div class="legal-title">Legal Notice</div>
+            This digital notarized act constitutes a forensic record of the system state at the time of execution. Performed in accordance with ISO/IEC 27037:2012 — Guidelines for identification, collection, acquisition and preservation of digital evidence. The integrity of this document is guaranteed by the SHA-256 hash chain. Any modification to the content after sealing will invalidate the chain verification. This act is valid as expert digital evidence in legal and compliance proceedings.
+        </div>
+    </div>
+
+    <div class="acta-footer">
+        <div class="acta-footer-brand">Hyperium <span>ZERO-STATE</span></div>
+        <div class="acta-footer-sub">Patricio Tirado, CEO — Hyperiumia — hyperiumia@protonmail.com</div>
+        <div style="font-size:11px;color:var(--m);margin-top:12px;font-family:'JetBrains Mono',monospace;letter-spacing:2px">ISO/IEC 27037:2012 COMPLIANT</div>
+    </div>
+</div>
+
+</body>
+</html>
